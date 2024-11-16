@@ -1,5 +1,6 @@
 import { Grammarly } from '@gravitacion/grammarly-api';
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { z } from 'zod';
 import { reformat } from './lib/transform';
 
@@ -10,6 +11,7 @@ const correctionRequestSchema = z.object({
 });
 
 const hono = new Hono();
+hono.use(cors());
 
 hono.post('/correct', async c => {
   try {
@@ -22,12 +24,13 @@ hono.post('/correct', async c => {
       });
     }
 
-    const results = await analyse.analyse(body.data.text);
-    const corrected = reformat(results);
+    const grammarResults = await analyse.analyse(body.data.text);
+    const correctedMessage = reformat(grammarResults);
 
     return c.json({
       error: false,
-      message: corrected
+      message: 'Successfully corrected the text',
+      corrected: correctedMessage
     });
   } catch (err) {
     console.error(err);
