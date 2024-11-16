@@ -82,11 +82,17 @@ export function correct(result) {
  * @param {any} result - The result to be reformatted.
  * @returns {string} The reformatted text.
  */
-export function reformat(result) {
+export function reformat(result: any): string {
   const final = correct(result);
-
   let finalText = final.corrected;
-  finalText = finalText.replace(/([.,!?;:])/g, '$1 ');
-  finalText = finalText.replace(/ +/g, ' ');
-  return finalText.trim() as string;
+
+  // Make sure there's a space after a comma, dot, etc.
+  finalText = finalText.replace(/([.,!?;:])\s*/g, '$1 ');
+
+  // Capitalize the first letter of every sentence
+  finalText = finalText.replace(/(^|[.!?]\s+)([a-z])/g, (_, p1, p2) => {
+    return p1 + p2.toUpperCase();
+  });
+
+  return finalText.trim();
 }
