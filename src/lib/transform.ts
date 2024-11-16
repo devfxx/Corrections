@@ -77,7 +77,6 @@ export function correct(result) {
 
 /**
  * Performs final reformatting on the given result.
- * Making sure there are spaces after commas, etc.
  *
  * @param {any} result - The result to be reformatted.
  * @returns {string} The reformatted text.
